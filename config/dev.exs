@@ -2,8 +2,8 @@ import Config
 
 # Configure your database
 config :nosso_contador, NossoContador.Repo,
-  username: "postgres",
-  password: "postgres",
+  username: "nosso_contador",
+  password: "nosso_contador",
   hostname: "localhost",
   database: "nosso_contador_dev",
   stacktrace: true,
