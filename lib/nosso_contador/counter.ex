@@ -16,7 +16,7 @@ defmodule NossoContador.Counter do
   end
 
   def get_last_values(limit \\ 5) do
-    CounterValue
+    __MODULE__
     |> order_by([c], desc: c.inserted_at)
     |> limit(^limit)
     |> select([c], %{value: c.value, inserted_at: c.inserted_at})
@@ -24,7 +24,7 @@ defmodule NossoContador.Counter do
   end
 
   def get_last_value do
-    CounterValue
+    __MODULE__
     |> order_by([c], desc: c.inserted_at)
     |> limit(1)
     |> select([c], c.value)
