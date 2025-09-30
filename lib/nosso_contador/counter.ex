@@ -16,20 +16,18 @@ defmodule NossoContador.Counter do
   end
 
   def get_last_values(limit \\ 5) do
-    from(c in __MODULE__,
-      order_by: [desc: c.inserted_at],
-      limit: ^limit,
-      select: %{value: c.value, inserted_at: c.inserted_at}
-    )
+    CounterValue
+    |> order_by([c], desc: c.inserted_at)
+    |> limit(^limit)
+    |> select([c], %{value: c.value, inserted_at: c.inserted_at})
     |> NossoContador.Repo.all()
   end
 
   def get_last_value do
-    from(c in __MODULE__,
-      order_by: [desc: c.inserted_at],
-      limit: 1,
-      select: c.value
-    )
+    CounterValue
+    |> order_by([c], desc: c.inserted_at)
+    |> limit(1)
+    |> select([c], c.value)
     |> NossoContador.Repo.one()
   end
 end
