@@ -35,3 +35,4 @@ nosso_contador-*.tar
 npm-debug.log
 /assets/node_modules/
 
+.env

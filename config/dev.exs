@@ -2,10 +2,11 @@ import Config
 
 # Configure your database
 config :nosso_contador, NossoContador.Repo,
-  username: "nosso_contador",
-  password: "nosso_contador",
-  hostname: "localhost",
-  database: "nosso_contador_dev",
+  username: System.get_env("DB_USERNAME"),
+  password: System.get_env("DB_PASSWORD"),
+  hostname: System.get_env("DB_HOST"),
+  database: System.get_env("DB_NAME"),
+  port: System.get_env("DB_PORT"),
   stacktrace: true,
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
