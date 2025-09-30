@@ -14,4 +14,13 @@ defmodule NossoContador.Counter do
     |> cast(attrs, [:value])
     |> validate_required([:value])
   end
+
+  def get_last_values(limit \\ 5) do
+    from(c in __MODULE__,
+      order_by: [desc: c.inserted_at],
+      limit: ^limit,
+      select: %{value: c.value, inserted_at: c.inserted_at}
+    )
+    |> NossoContador.Repo.all()
+  end
 end

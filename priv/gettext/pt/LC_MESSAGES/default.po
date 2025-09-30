@@ -1,0 +1,26 @@
+msgid "Our Counter"
+msgstr "Nosso Contador"
+
+msgid "Welcome, bro!"
+msgstr "Bem-vindo, bro!"
+
+msgid "Go to Counter"
+msgstr "Ir para Contador"
+
+msgid "Counter"
+msgstr "Contador"
+
+msgid "Decrease"
+msgstr "Diminuir"
+
+msgid "Increase"
+msgstr "Aumentar"
+
+msgid "Save"
+msgstr "Salvar"
+
+msgid "Last 5 saved values"
+msgstr "Últimos 5 valores salvos"
+
+msgid "The counter is now: %{count}"
+msgstr "O contador está agora: %{count}"

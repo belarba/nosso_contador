@@ -17,7 +17,7 @@ defmodule NossoContadorWeb.Router do
   scope "/", NossoContadorWeb do
     pipe_through :browser
 
-    get "/", PageController, :home
+    live "/", CounterLive, :index
   end
 
   # Other scopes may use custom stacks.
