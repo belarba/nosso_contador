@@ -6,14 +6,26 @@ defmodule NossoContadorWeb.CounterLive do
   @impl true
   def mount(_params, _session, socket) do
     last_values = Counter.get_last_values()
+    locale = Gettext.get_locale(NossoContadorWeb.Gettext)
 
     socket =
       socket
       |> assign(:count, 0)
       |> assign(:last_values, last_values)
-      |> assign(:locale, Gettext.get_locale())
+      |> assign(:locale, locale)
 
     {:ok, socket}
+  end
+
+  @impl true
+  def handle_params(params, _uri, socket) do
+    locale = params["locale"] || socket.assigns.locale || "en"
+
+    # Atualiza o locale no Gettext
+    Gettext.put_locale(NossoContadorWeb.Gettext, locale)
+
+    socket = assign(socket, :locale, locale)
+    {:noreply, socket}
   end
 
   @impl true
@@ -50,9 +62,5 @@ defmodule NossoContadorWeb.CounterLive do
     %Counter{}
     |> Counter.changeset(%{value: count})
     |> Repo.insert()
-  end
-
-  def handle_params(_params, _uri, socket) do
-    {:noreply, socket}
   end
 end
