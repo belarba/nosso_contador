@@ -14,7 +14,7 @@ defmodule NossoContadorWeb.CounterLive do
       |> assign(:count, last_value)
       |> assign(:last_values, last_values)
       |> assign(:locale, locale)
-      |> assign(:dropdown_open, false)  # Estado do dropdown
+      |> assign(:dropdown_open, false)
 
     {:ok, socket}
   end
@@ -23,22 +23,17 @@ defmodule NossoContadorWeb.CounterLive do
   def handle_params(params, _uri, socket) do
     locale = params["locale"] || socket.assigns.locale || "en"
 
-    # Atualiza o locale no Gettext
     Gettext.put_locale(NossoContadorWeb.Gettext, locale)
 
     socket =
       socket
       |> assign(:locale, locale)
-      |> assign(:dropdown_open, false)  # Fecha o dropdown ao mudar locale
+      |> assign(:dropdown_open, false)
 
     {:noreply, socket}
   end
 
   @impl true
-  def handle_event("toggle-dropdown", _params, socket) do
-    {:noreply, assign(socket, :dropdown_open, !socket.assigns.dropdown_open)}
-  end
-
   def handle_event("increase", _params, socket) do
     new_count = socket.assigns.count + 1
     {:noreply, update_count(socket, new_count)}
@@ -53,29 +48,34 @@ defmodule NossoContadorWeb.CounterLive do
     current_count = socket.assigns.count
     last_saved_value = Counter.get_last_value()
 
-    # Só salva se o valor for diferente do último salvo ou se não houver último valor
     if last_saved_value == nil || current_count != last_saved_value do
       save_count(current_count)
       last_values = Counter.get_last_values()
 
-      socket =
+      {:noreply,
         socket
         |> assign(:last_values, last_values)
-        |> push_event("show_notification", %{
-            message: Gettext.gettext(NossoContadorWeb.Gettext, "Value saved: %{count}", count: current_count)
+        |> push_event("show-notification", %{
+          type: "success",
+          title: gettext("Saved!"),
+          message: gettext("The counter is now: %{count}", count: current_count),
+          duration: 4000
         })
-
-      {:noreply, socket}
+      }
     else
-      # Valor igual ao último salvo, mostra mensagem diferente
-      socket =
-        socket
-        |> push_event("show_notification", %{
-            message: Gettext.gettext(NossoContadorWeb.Gettext, "Value already saved: %{count}", count: current_count)
+      {:noreply,
+        push_event(socket, "show-notification", %{
+          type: "warning",
+          title: gettext("Already Saved"),
+          message: gettext("Value already saved: %{count}", count: current_count),
+          duration: 3000
         })
-
-      {:noreply, socket}
+      }
     end
+  end
+
+  def handle_event("toggle-dropdown", _params, socket) do
+    {:noreply, assign(socket, :dropdown_open, !socket.assigns.dropdown_open)}
   end
 
   defp update_count(socket, new_count) do

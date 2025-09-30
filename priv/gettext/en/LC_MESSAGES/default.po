@@ -30,3 +30,9 @@ msgstr "Value saved: %{count}"
 
 msgid "Value already saved: %{count}"
 msgstr "Value already saved: %{count}"
+
+msgid "Saved!"
+msgstr "Saved!"
+
+msgid "Already Saved"
+msgstr "Already Saved"
