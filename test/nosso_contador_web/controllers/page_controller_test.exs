@@ -1,8 +1,11 @@
 defmodule NossoContadorWeb.PageControllerTest do
   use NossoContadorWeb.ConnCase
 
-  test "GET /", %{conn: conn} do
+  test "GET / redireciona para o LiveView do contador", %{conn: conn} do
     conn = get(conn, ~p"/")
-    assert html_response(conn, 200) =~ "Peace of mind from prototype to production"
+
+    # Verifica que redireciona para a página do LiveView
+    assert html_response(conn, 200) =~ "Our Counter"
+    assert html_response(conn, 200) =~ "Counter"
   end
 end
