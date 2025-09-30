@@ -24,3 +24,9 @@ msgstr "Últimos 5 valores salvos"
 
 msgid "The counter is now: %{count}"
 msgstr "O contador está agora: %{count}"
+
+msgid "Value saved: %{count}"
+msgstr "Valor salvo: %{count}"
+
+msgid "Value already saved: %{count}"
+msgstr "Valor já salvo: %{count}"

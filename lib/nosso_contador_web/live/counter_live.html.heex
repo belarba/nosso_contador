@@ -2,21 +2,69 @@
   <div class="max-w-4xl mx-auto px-4">
     <!-- Header -->
     <header class="mb-8">
-      <h1 class="text-3xl font-bold text-gray-800 text-center">
-        <%= gettext("Our Counter") %>
-      </h1>
-      
-      <!-- Language Toggle -->
-      <div class="flex justify-center mt-4 space-x-4">
-        <a href="?locale=pt" 
-          class={["text-2xl hover:opacity-80", @locale == "pt" && "border-b-2 border-green-500"]}>
-          🇧🇷
-        </a>
+      <div class="flex justify-between items-center">
+        <h1 class="text-3xl font-bold text-gray-800">
+          <%= gettext("Our Counter") %>
+        </h1>
+        
+        <!-- Language Dropdown -->
+        <div class="relative">
+          <button 
+            phx-click="toggle-dropdown"
+            class="flex items-center space-x-2 px-4 py-2 bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          >
+            <span class="text-2xl">
+              <%= if @locale == "pt", do: "🇧🇷", else: "🇺🇸" %>
+            </span>
+            <span class="text-gray-700 font-medium">
+              <%= if @locale == "pt", do: "Português", else: "English" %>
+            </span>
+            <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+            </svg>
+          </button>
 
-        <a href="?locale=en" 
-          class={["text-2xl hover:opacity-80", @locale == "en" && "border-b-2 border-blue-500"]}>
-          🇺🇸
-        </a>
+          <!-- Dropdown Menu -->
+          <%= if @dropdown_open do %>
+            <div class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-10">
+              <a 
+                href="?locale=pt"
+                class={
+                  [
+                    "flex items-center space-x-3 px-4 py-2 text-gray-700 hover:bg-gray-100",
+                    @locale == "pt" && "bg-blue-50 text-blue-700"
+                  ]
+                }
+              >
+                <span class="text-2xl">🇧🇷</span>
+                <span>Português</span>
+                <%= if @locale == "pt" do %>
+                  <svg class="w-4 h-4 ml-auto text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                  </svg>
+                <% end %>
+              </a>
+              
+              <a 
+                href="?locale=en"
+                class={
+                  [
+                    "flex items-center space-x-3 px-4 py-2 text-gray-700 hover:bg-gray-100",
+                    @locale == "en" && "bg-blue-50 text-blue-700"
+                  ]
+                }
+              >
+                <span class="text-2xl">🇺🇸</span>
+                <span>English</span>
+                <%= if @locale == "en" do %>
+                  <svg class="w-4 h-4 ml-auto text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                  </svg>
+                <% end %>
+              </a>
+            </div>
+          <% end %>
+        </div>
       </div>
     </header>
 

@@ -23,4 +23,13 @@ defmodule NossoContador.Counter do
     )
     |> NossoContador.Repo.all()
   end
+
+  def get_last_value do
+    from(c in __MODULE__,
+      order_by: [desc: c.inserted_at],
+      limit: 1,
+      select: c.value
+    )
+    |> NossoContador.Repo.one()
+  end
 end

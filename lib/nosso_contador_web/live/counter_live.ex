@@ -5,14 +5,16 @@ defmodule NossoContadorWeb.CounterLive do
 
   @impl true
   def mount(_params, _session, socket) do
+    last_value = Counter.get_last_value() || 0
     last_values = Counter.get_last_values()
     locale = Gettext.get_locale(NossoContadorWeb.Gettext)
 
     socket =
       socket
-      |> assign(:count, 0)
+      |> assign(:count, last_value)
       |> assign(:last_values, last_values)
       |> assign(:locale, locale)
+      |> assign(:dropdown_open, false)  # Estado do dropdown
 
     {:ok, socket}
   end
@@ -24,11 +26,19 @@ defmodule NossoContadorWeb.CounterLive do
     # Atualiza o locale no Gettext
     Gettext.put_locale(NossoContadorWeb.Gettext, locale)
 
-    socket = assign(socket, :locale, locale)
+    socket =
+      socket
+      |> assign(:locale, locale)
+      |> assign(:dropdown_open, false)  # Fecha o dropdown ao mudar locale
+
     {:noreply, socket}
   end
 
   @impl true
+  def handle_event("toggle-dropdown", _params, socket) do
+    {:noreply, assign(socket, :dropdown_open, !socket.assigns.dropdown_open)}
+  end
+
   def handle_event("increase", _params, socket) do
     new_count = socket.assigns.count + 1
     {:noreply, update_count(socket, new_count)}
@@ -40,17 +50,32 @@ defmodule NossoContadorWeb.CounterLive do
   end
 
   def handle_event("save", _params, socket) do
-    save_count(socket.assigns.count)
-    last_values = Counter.get_last_values()
+    current_count = socket.assigns.count
+    last_saved_value = Counter.get_last_value()
 
-    socket =
-      socket
-      |> assign(:last_values, last_values)
-      |> push_event("show_notification", %{
-          message: Gettext.gettext(NossoContadorWeb.Gettext, "The counter is now: %{count}", count: socket.assigns.count)
-      })
+    # Só salva se o valor for diferente do último salvo ou se não houver último valor
+    if last_saved_value == nil || current_count != last_saved_value do
+      save_count(current_count)
+      last_values = Counter.get_last_values()
 
-    {:noreply, socket}
+      socket =
+        socket
+        |> assign(:last_values, last_values)
+        |> push_event("show_notification", %{
+            message: Gettext.gettext(NossoContadorWeb.Gettext, "Value saved: %{count}", count: current_count)
+        })
+
+      {:noreply, socket}
+    else
+      # Valor igual ao último salvo, mostra mensagem diferente
+      socket =
+        socket
+        |> push_event("show_notification", %{
+            message: Gettext.gettext(NossoContadorWeb.Gettext, "Value already saved: %{count}", count: current_count)
+        })
+
+      {:noreply, socket}
+    end
   end
 
   defp update_count(socket, new_count) do

@@ -24,3 +24,9 @@ msgstr "Last 5 saved values"
 
 msgid "The counter is now: %{count}"
 msgstr "The counter is now: %{count}"
+
+msgid "Value saved: %{count}"
+msgstr "Value saved: %{count}"
+
+msgid "Value already saved: %{count}"
+msgstr "Value already saved: %{count}"
